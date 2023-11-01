@@ -1,0 +1,4 @@
+C:\Users\trucq\Desktop\EduHub\EduHubLibrary\obj\Debug\net6.0\EduHubLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\trucq\Desktop\EduHub\EduHubLibrary\obj\Debug\net6.0\EduHubLibrary.AssemblyInfoInputs.cache
+C:\Users\trucq\Desktop\EduHub\EduHubLibrary\obj\Debug\net6.0\EduHubLibrary.AssemblyInfo.cs
+C:\Users\trucq\Desktop\EduHub\EduHubLibrary\obj\Debug\net6.0\EduHubLibrary.csproj.CoreCompileInputs.cache
