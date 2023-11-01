@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EduHubLibrary.DataModels.Enums;
 
 namespace EduHubLibrary.DataModels
 {
@@ -23,7 +24,7 @@ namespace EduHubLibrary.DataModels
         public DateTime JoinDate { get; set; }
 
         [Required]
-        public string Status { get; set; }
+        public Status Status { get; set; }
 
         public Campaign Campaign { get; set; }
         public User User { get; set; }
