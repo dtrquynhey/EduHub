@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EduHubLibrary.Interfaces
 {
-    public interface IUserService
+    public interface IUserServices
     {
         Task<bool> IsEmailExistedAsycn(string email);
         Task<User> GetUserByEmailAsycn(string email);

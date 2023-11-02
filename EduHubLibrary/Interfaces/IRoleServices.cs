@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EduHubLibrary.Interfaces
 {
-    public interface IRoleService
+    public interface IRoleServices
     {
         Task<Role> GetRoleByIdAsync(int roleId);
         Task<IEnumerable<Role>> GetAllRolesAsync();
