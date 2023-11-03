@@ -12,11 +12,7 @@ namespace EduHubLibrary.DataModels
     public class User
     {
         [Key]
-        public int UserId { get; set; }
-
-        [ForeignKey("Role")]
-        public int RoleId { get; set; }
-         
+        public int UserId { get; set; }         
 
         [Required]
         //[Index(IsUnique = true)]
@@ -37,9 +33,9 @@ namespace EduHubLibrary.DataModels
 
         [Required]
         public bool IsActive { get; set; }
-
+        
         public List<Interaction> UserInteractions { get; set; }
-        public Role Role { get; set; }
 
+        public List<CampaignMember> Campaigns { get; set; }
     }
 }
