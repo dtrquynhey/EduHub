@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("EduHubConnectionString") ?? throw new InvalidOperationException("Connection string 'EduHubConnectionString' not found.");
+var identityConnectionString = builder.Configuration.GetConnectionString("IdentityEduHubConnectionString") ?? throw new InvalidOperationException("Connection string 'IdentityEduHubConnectionString' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

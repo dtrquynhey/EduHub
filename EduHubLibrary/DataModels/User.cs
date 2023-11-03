@@ -16,7 +16,7 @@ namespace EduHubLibrary.DataModels
 
         [ForeignKey("Role")]
         public int RoleId { get; set; }
-
+         
 
         [Required]
         //[Index(IsUnique = true)]
