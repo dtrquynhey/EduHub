@@ -33,13 +33,11 @@ namespace EduHubLibrary.DataModels
         [Required]
         public CampaignType CampaignType { get; set; }
 
-        public List<CampaignMember> Members { get; set; }
-        public List<Interaction> Interactions { get; set; }
+        public IEnumerable<CampaignMember> Members { get; set; }
+        public IEnumerable<Interaction> Interactions { get; set; }
         public Engagement Engagement { get; set; }
 
         [ForeignKey("TeacherId")]
         public User User { get; set; }
-
-
     }
 }

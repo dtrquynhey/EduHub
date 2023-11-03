@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduHubLibrary.Migrations
 {
     [DbContext(typeof(EduHubDbContext))]
-    [Migration("20231103182129_InitalCreate")]
+    [Migration("20231103203143_InitalCreate")]
     partial class InitalCreate
     {
         /// <inheritdoc />
@@ -161,13 +161,15 @@ namespace EduHubLibrary.Migrations
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnOrder(1);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -190,6 +192,11 @@ namespace EduHubLibrary.Migrations
 
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(2);
 
                     b.HasKey("UserId");
 
