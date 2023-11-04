@@ -23,14 +23,8 @@ namespace EduHubLibrary.DataModels
         [Required]
         public string LastName { get; set; }
 
-        [Required]
-        public string Username { get; set; }
-
-        public string ProfilePicture { get; set; }
-
         [DataType(DataType.DateTime)]
-        public DateTime RegistrationDate { get; set; }
-        public bool IsActive { get; set; } = false;
+        public DateTime RegistrationDate { get; set; } = DateTime.Now;
 
         public IEnumerable<Interaction> UserInteractions { get; set; }
 

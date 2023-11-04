@@ -41,6 +41,6 @@ namespace EduHubWeb.Models
         public IEnumerable<Interaction> Interactions { get; set; }
         public Engagement Engagement { get; set; }
 
-        public UserProfile User { get; set; }
+        public User User { get; set; }
     }
 }
