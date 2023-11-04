@@ -71,7 +71,7 @@ namespace EduHubLibrary.Services
         {
             return await _dbContext.Users.AnyAsync(u => u.Email == email);
 
-            throw new NotImplementedException();
+            throw new Exception();
         }
 
         public async Task UpdateUserAsync(User user)
@@ -81,7 +81,7 @@ namespace EduHubLibrary.Services
                 _dbContext.Users.Update(user);
                 await _dbContext.SaveChangesAsync();
             }
-            throw new NotImplementedException();
+            throw new Exception();
         }
     }
 }

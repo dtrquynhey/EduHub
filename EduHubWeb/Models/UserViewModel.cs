@@ -1,24 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace EduHubWeb.Models
 {
-    public class UserViewModel
+    public class UserViewModel : IdentityUser
     {
-        [Display(Name = "Email Address")]
-        [DataType(DataType.EmailAddress)]
-        [Required(ErrorMessage = "Please enter your Email Address.")]
-        public string Email { get; set; }
-
         [Display(Name = "Username")]
         [Required(ErrorMessage = "Please enter your Username.")]
         public string Username { get; set; }
-
-        [Display(Name = "Password")]
-        [Required(ErrorMessage = "Please enter your Password.")]
-        [DataType(DataType.Password)]
-        [StringLength(100, MinimumLength = 10, ErrorMessage = "Password should be minimum length of 8 chars.")]
-        public string PasswordHash { get; set; }
 
         [Display(Name = "Firstname")]
         [Required(ErrorMessage = "Please enter your Firstname.")]
@@ -38,4 +28,5 @@ namespace EduHubWeb.Models
         [Required]
         public bool IsActive { get; set; }
     }
+
 }

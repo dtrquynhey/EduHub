@@ -12,7 +12,6 @@ namespace EduHubLibrary.DataModels
     public class User
     {
         [Key]
-        [Column(Order = 0)]
         public int UserId { get; set; }
 
         [Required]
@@ -27,16 +26,11 @@ namespace EduHubLibrary.DataModels
         [Required]
         public string Username { get; set; }
 
-        [Required]
-        public string PasswordHash { get; set; }
-
-
         public string ProfilePicture { get; set; }
 
+        [DataType(DataType.DateTime)]
         public DateTime RegistrationDate { get; set; }
-
-        [Required]
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = false;
 
         public IEnumerable<Interaction> UserInteractions { get; set; }
 

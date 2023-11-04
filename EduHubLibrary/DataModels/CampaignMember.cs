@@ -26,6 +26,6 @@ namespace EduHubLibrary.DataModels
         public Campaign Campaign { get; set; }
 
         [ForeignKey("MemberId")]
-        public User User { get; set; }
+        public User user { get; set; }
     }
 }

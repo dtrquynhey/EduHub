@@ -24,16 +24,5 @@ namespace EduHubLibrary.DataAccess
                 .HasIndex(u => u.Email)
                 .IsUnique();
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            //if (!optionsBuilder.IsConfigured)
-            //{
-            //    optionsBuilder.UseSqlServer("EduHubConnectionString", builder =>
-            //    {
-            //        builder.MigrationsAssembly(typeof(EduHubDbContext).Assembly.FullName);
-            //    });
-            //}
-        }
     }
 }
