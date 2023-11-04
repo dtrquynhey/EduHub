@@ -13,9 +13,6 @@ namespace EduHubLibrary.DataModels
     {
         [Key]
         public int CampaignId { get; set; }
-
-        // Foreign Key to the Teacher (User) who created the campaign
-        [ForeignKey("User")]
         public int TeacherId { get; set; }
 
         [Required]
@@ -36,18 +33,11 @@ namespace EduHubLibrary.DataModels
         [Required]
         public CampaignType CampaignType { get; set; }
 
-
-        // Navigation property to CampaignMembers
-        public List<CampaignMember> Members { get; set; }
-
-        // Navigation property to UserInteractions
-        public List<Interaction> Interactions { get; set; }
-
-        // Navigation property to CampaignEngagements
+        public IEnumerable<CampaignMember> Members { get; set; }
+        public IEnumerable<Interaction> Interactions { get; set; }
         public Engagement Engagement { get; set; }
 
-        public User Teacher { get; set; }
-
-
+        [ForeignKey("TeacherId")]
+        public User User { get; set; }
     }
 }

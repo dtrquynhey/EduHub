@@ -13,12 +13,8 @@ namespace EduHubLibrary.DataModels
     {
         [Key]
         public int CampaignMemberId { get; set; }
-
-        [ForeignKey("Campaign")]
-        public int CampaignId { get; set; }
-
-        [ForeignKey("User")]
-        public int UserId { get; set; }
+        public int CampaignId { get; set; }        
+        public int MemberId { get; set; }
 
         [Required]
         public DateTime JoinDate { get; set; }
@@ -26,7 +22,10 @@ namespace EduHubLibrary.DataModels
         [Required]
         public Status Status { get; set; }
 
+        [ForeignKey("CampaignId")]
         public Campaign Campaign { get; set; }
-        public User User { get; set; }
+
+        [ForeignKey("MemberId")]
+        public User user { get; set; }
     }
 }

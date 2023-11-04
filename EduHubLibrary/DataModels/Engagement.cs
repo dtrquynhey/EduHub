@@ -12,8 +12,6 @@ namespace EduHubLibrary.DataModels
     {
         [Key]
         public int EngagementId { get; set; }
-
-        [ForeignKey("Campaign")]
         public int CampaignId { get; set; }
 
         [Required]
@@ -25,6 +23,8 @@ namespace EduHubLibrary.DataModels
         [Required]
         public int CommentsCount { get; set; }
 
+
+        [ForeignKey("CampaignId")]
         public Campaign Campaign { get; set; }
     }
 }

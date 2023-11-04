@@ -11,9 +11,10 @@ namespace EduHubLibrary.Interfaces
     {
         Task<bool> IsEmailExistedAsycn(string email);
         Task<User> GetUserByEmailAsycn(string email);
+        Task<User> GetUserByIdAsycn(int id);
         Task<IEnumerable<User>> GetAllUsersAsync();
         Task CreateUserAsync(User user);
         Task UpdateUserAsync(User user);
-        Task DeleteUserAsync(User user);
+        Task DeleteUserAsync(int id);
     }
 }

@@ -14,32 +14,20 @@ namespace EduHubLibrary.DataModels
         [Key]
         public int UserId { get; set; }
 
-        [ForeignKey("Role")]
-        public int RoleId { get; set; }
-         
+        [Required]
+        public string Email { get; set; }
 
         [Required]
-        //[Index(IsUnique = true)]
-        public string Email { get; set; } = string.Empty;
+        public string FirstName { get; set; }
 
         [Required]
-        public string PasswordHash { get; set; } = string.Empty;
+        public string LastName { get; set; }
 
-        [Required]
-        public string FirstName { get; set; } = string.Empty;
+        [DataType(DataType.DateTime)]
+        public DateTime RegistrationDate { get; set; } = DateTime.Now;
 
-        [Required]
-        public string LastName { get; set; } = string.Empty;
+        public IEnumerable<Interaction> UserInteractions { get; set; }
 
-        public string ProfilePicture { get; set; } = string.Empty;
-
-        public DateTime RegistrationDate { get; set; }
-
-        [Required]
-        public bool IsActive { get; set; }
-
-        public List<Interaction> UserInteractions { get; set; }
-        public Role Role { get; set; }
-
+        public IEnumerable<CampaignMember> Campaigns { get; set; }
     }
 }

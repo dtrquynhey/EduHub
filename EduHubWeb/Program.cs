@@ -1,3 +1,4 @@
+using EduHubLibrary.DataAccess;
 using EduHubWeb.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -7,13 +8,22 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("EduHubConnectionString") ?? throw new InvalidOperationException("Connection string 'EduHubConnectionString' not found.");
 var identityConnectionString = builder.Configuration.GetConnectionString("IdentityEduHubConnectionString") ?? throw new InvalidOperationException("Connection string 'IdentityEduHubConnectionString' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+
+builder.Services.AddDbContext<EduHubDbContext>(options =>
     options.UseSqlServer(connectionString));
+    //.EnableSensitiveDataLogging()
+    //.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))) ;
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(identityConnectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<UserMappingService>();
 
 var app = builder.Build();
 
