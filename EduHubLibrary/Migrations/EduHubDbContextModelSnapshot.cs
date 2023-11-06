@@ -44,6 +44,10 @@ namespace EduHubLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -133,7 +137,6 @@ namespace EduHubLibrary.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("InteractionDate")
@@ -247,8 +250,7 @@ namespace EduHubLibrary.Migrations
 
             modelBuilder.Entity("EduHubLibrary.DataModels.Campaign", b =>
                 {
-                    b.Navigation("Engagement")
-                        .IsRequired();
+                    b.Navigation("Engagement");
 
                     b.Navigation("Interactions");
 

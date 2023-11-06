@@ -14,18 +14,21 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using EduHubWeb.Data.Enums;
 
 namespace EduHubWeb.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -115,6 +118,16 @@ namespace EduHubWeb.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+
+                    // Check if the user is in the "Teacher" role
+                    var user = await _userManager.FindByNameAsync(Input.Email);
+                    if (await _userManager.IsInRoleAsync(user, Roles.Teacher.ToString()))
+                    {
+                        // If the user is a teacher, redirect to the Create Campaign view
+                        return RedirectToAction("Index", "Campaigns");
+                    }
+
+                    // For users who are not teachers, redirect to the returnUrl
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

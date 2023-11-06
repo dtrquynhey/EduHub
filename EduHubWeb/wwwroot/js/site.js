@@ -2,3 +2,10 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+<script>
+    function selectRole(role) {
+        document.getElementById("Role").value = role;
+    document.querySelector(".btn-secondary").textContent = role;
+    }
+</script>
