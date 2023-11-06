@@ -1,31 +1,55 @@
 using EduHubLibrary.DataAccess;
+using EduHubLibrary.Services;
 using EduHubWeb.Data;
+using EduHubWeb.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("EduHubConnectionString") ?? throw new InvalidOperationException("Connection string 'EduHubConnectionString' not found.");
+
 var identityConnectionString = builder.Configuration.GetConnectionString("IdentityEduHubConnectionString") ?? throw new InvalidOperationException("Connection string 'IdentityEduHubConnectionString' not found.");
 
 builder.Services.AddDbContext<EduHubDbContext>(options =>
-    options.UseSqlServer(connectionString));
-    //.EnableSensitiveDataLogging()
-    //.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))) ;
+    options.UseSqlServer(connectionString)
+    .EnableSensitiveDataLogging()
+    .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))) ;
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(identityConnectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+    options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddRazorPages();
+
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<UserMappingService>();
+builder.Services.AddScoped<DataMappingService>();
+
+builder.Services.AddScoped<IdentitySeederService>();
+
+builder.Services.AddScoped<CampaignServices>();
+
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var seederService = scope.ServiceProvider.GetRequiredService<IdentitySeederService>();
+    await seederService.SeedIdentityRolesAsync();
+    await seederService.SeedDefaultAdminAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -40,6 +64,7 @@ else
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -49,6 +74,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();

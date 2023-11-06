@@ -9,16 +9,14 @@ namespace EduHubWeb.Models
         public string Email {  get; set; }
 
         [Display(Name = "Firstname")]
-        [Required(ErrorMessage = "Please enter your Firstname.")]
+        [Required(ErrorMessage = "The FirstName field is required.")]
         public string FirstName { get; set; }
 
 
         [Display(Name = "Lastname")]
-        [Required(ErrorMessage = "Please enter your Lastname.")]
+        [Required(ErrorMessage = "The LastName field is required.")]
         public string LastName { get; set; }
 
-
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = false)]
         public DateTime RegistrationDate { get; set; }
     }
 

@@ -1,0 +1,63 @@
+﻿@* @using EduHubLibrary.DataModels; *@
+@model List<CampaignViewModel>
+@{
+    Layout = "_TeacherLayout";
+}
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<h1>Active Campaigns</h1>
+
+<div class="container">
+    <main role="main">
+        <div class="row row-cols-1 row-cols-md-4 g-6">
+            @foreach (var campaign in Model)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="@campaign.ImageUrl" class="card-img-top img-fluid" alt="...">
+                        <div class="card-body">
+                            <h4 class="card-header align-items-center">@campaign.Title</h4><br>
+                            <p class="card-title">@campaign.Description</p>
+                            <p class="card-text">@campaign.Content</p>
+                            <p class="card-text">@campaign.CampaignType</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-body-secondary">@campaign.TeacherId</small>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="row">
+        </div>
+        <div class="col-md-4">
+            <h2>Engagement Statistics</h2>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Campaign 1</h5>
+                    <p class="card-text">Likes: 50</p>
+                    <p class="card-text">Comments: 25</p>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Campaign 2</h5>
+                    <p class="card-text">Likes: 35</p>
+                    <p class="card-text">Comments: 15</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>Notifications</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Notification 1</h5>
+                <p class="card-text">Details of the notification.</p>
+            </div>
+        </div>
+    </main>
+</div>

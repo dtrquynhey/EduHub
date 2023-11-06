@@ -16,23 +16,22 @@ namespace EduHubWeb.Models
         [StringLength(255, MinimumLength = 5, ErrorMessage = "Title must be between 5 and 255 characters.")]
         public string Title { get; set; }
 
-        [StringLength(1000, ErrorMessage = "Description must be at most 10 characters.")]
+        [Required(ErrorMessage = "Description must be at most 10 characters.")]
         public string Description { get; set; }
 
-        [StringLength(4000, ErrorMessage = "Content must be at most 10 characters.")]
-        [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "Content must be at most 10 characters.")]
         public string Content { get; set; }
 
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Required]
+        public string ImageUrl { get; set; }
+
+        [DataType(DataType.DateTime)]
         public DateTime CreatedDate { get; set; }
 
-        [Required(ErrorMessage = "Last Modified Date is required.")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.DateTime)]
         public DateTime LastModifiedDate { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
         [Required(ErrorMessage = "Please select a campaign type.")]
         public CampaignType CampaignType { get; set; }

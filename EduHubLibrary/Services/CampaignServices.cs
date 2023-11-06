@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EduHubLibrary.Services
 {
-    public class CampaignServices : ICampaignServices
+    public class CampaignServices : Interfaces.ICampaignServices
     {
         private readonly EduHubDbContext _dbContext;
 

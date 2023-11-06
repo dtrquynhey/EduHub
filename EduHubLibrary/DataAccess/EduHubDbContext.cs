@@ -6,6 +6,10 @@ namespace EduHubLibrary.DataAccess
 {
     public class EduHubDbContext : DbContext
     {
+        public EduHubDbContext()
+        {
+        }
+
         public EduHubDbContext(DbContextOptions<EduHubDbContext> options) : base(options)
         {
         }
