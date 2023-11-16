@@ -43,6 +43,8 @@ namespace EduHubLibrary.DataModels
 
         public IEnumerable<CampaignMember> Members { get; set; }
         public IEnumerable<Interaction> Interactions { get; set; }
+        [NotMapped]
+        public IEnumerable<Interaction> Comments { get; set; }
         public Engagement Engagement { get; set; }
 
     }

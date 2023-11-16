@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduHubLibrary.Migrations
 {
     [DbContext(typeof(EduHubDbContext))]
-    [Migration("20231106082558_updateCampaign2")]
-    partial class updateCampaign2
+    [Migration("20231116075715_FixCampaignRelationships")]
+    partial class FixCampaignRelationships
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

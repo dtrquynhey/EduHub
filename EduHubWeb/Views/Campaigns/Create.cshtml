@@ -2,51 +2,58 @@
 
 @{
     ViewBag.Title = "New Campaign";
-}
-@{
-    Layout = "_TeacherLayout";
+    Layout = "_Layout";
 }
 
-<h1 class="text-center">New Campaign</h1>
+<div class="row text-center py-5 d-flex justify-content-center align-items-center">
+    <div class="col-md-10 col-lg-8">
+        <div class="card mx-auto" style="background: #555555">
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <form asp-action="Create" method="post">
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Title" class="form-control" autocomplete="on" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Title">Title</label>
-                <span asp-validation-for="Title" class="text-danger"></span>
+
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form asp-action="Create" method="post">
+                        <h1 class="text-center" style="color: #FFFFFF;">New Campaign</h1>
+
+                        <hr />
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Title" class="form-control" autocomplete="on" aria-required="true" placeholder="name@example.com" />
+                            <label asp-for="Title">Title</label>
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Description" class="form-control" autocomplete="on" aria-required="true" placeholder="password" />
+                            <label asp-for="Description">Description</label>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea asp-for="Content" class="form-control" autocomplete="on" placeholder="content" id="floatingTextarea2" style="height: 100px" aria-required="true"></textarea>
+                            <label asp-for="Content">Content</label>
+                            <span asp-validation-for="Content" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="ImageUrl" class="form-control" autocomplete="on" aria-required="true" placeholder="name@example.com" />
+                            <label asp-for="ImageUrl">Image Url</label>
+                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select asp-for="CampaignType" class="form-control" aria-required="true" required>
+                                <option selected hidden>Campaign Type</option>
+                                <option value="Open">Open</option>
+                                <option value="Restricted">Restricted</option>
+                                <option value="PublicInformation">Public Information</option>
+                                <option value="InvitationOnly">Invitation Only</option>
+                            </select>
+                            <label asp-for="CampaignType">Campaign Type</label>
+                        </div>
+                        <div class="d-grid col-6 mx-auto">
+                            <button id="addCampaign" class="btn btn-primary" type="submit">Create</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Description" class="form-control" autocomplete="on" aria-required="true" placeholder="password" />
-                <label asp-for="Description">Description</label>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <textarea asp-for="Content" class="form-control" autocomplete="on" placeholder="content" id="floatingTextarea2" style="height: 100px" aria-required="true"></textarea>
-                <label asp-for="Content">Content</label>
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="ImageUrl" class="form-control" autocomplete="on" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="ImageUrl">Image Url</label>
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <select asp-for="CampaignType" class="form-control" aria-required="true" required>
-                    <option selected hidden>Campaign Type</option>
-                    <option value="Open">Open</option>
-                    <option value="Restricted">Restricted</option>
-                    <option value="PublicInformation">Public Information</option>
-                    <option value="InvitationOnly">Invitation Only</option>
-                </select>
-                <label asp-for="CampaignType">Campaign Type</label>
-            </div>
-            <div class="d-grid col-6 mx-auto">
-                <button id="addCampaign" class="btn btn-primary" type="submit">Create</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>

@@ -119,16 +119,21 @@ namespace EduHubWeb.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
 
-                    // Check if the user is in the "Teacher" role
+                    // Check the  role
                     var user = await _userManager.FindByNameAsync(Input.Email);
-                    if (await _userManager.IsInRoleAsync(user, Roles.Teacher.ToString()))
+                    if (user != null)
                     {
-                        // If the user is a teacher, redirect to the Create Campaign view
-                        return RedirectToAction("Index", "Campaigns");
+                        if (await _userManager.IsInRoleAsync(user, Roles.Teacher.ToString()) ||
+                            await _userManager.IsInRoleAsync(user, Roles.Student.ToString()) ||
+                            await _userManager.IsInRoleAsync(user, Roles.Admin.ToString()))
+                        {
+                            return RedirectToAction("Index", "Newsfeed");
+                        }
                     }
-
-                    // For users who are not teachers, redirect to the returnUrl
-                    return LocalRedirect(returnUrl);
+                    else
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {

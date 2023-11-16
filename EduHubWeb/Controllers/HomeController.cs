@@ -1,21 +1,27 @@
 ﻿using EduHubWeb.Models;
+using EduHubWeb.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace EduHubWeb.Controllers
 {
+    [ServiceFilter(typeof(PopulateRolesFilter))]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var roles = HttpContext.Items["Roles"] as IList<string>;
             return View();
         }
 

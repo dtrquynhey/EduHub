@@ -2,6 +2,17 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+@* <div class="d-flex justify-content-center align-items-center" style="min-height: 70vh;"> *@
+<div class="text-center py-5 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <!-- Bootstrap card for text -->
+    <div class="card mx-auto" style="max-width: 40rem; background: #555555">
+        <div class="card-body">
+            <h1 class="card-title display-4" style="color: #FFFFFF">Welcome to EduHubWeb!</h1>
+            <p class="card-text" style="color: rgba(255, 255, 255, 0.55);">Join our community and start learning today!</p>
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary btn-lg" role="button">Join our Education Hub</a>
+            <p class="mt-4" style="color: rgba(255, 255, 255, 0.55);">Already a member? <a asp-area="Identity" asp-page="/Account/Login" class="text-primary">Log in here</a></p>
+
+        </div>
+    </div>
 </div>
+
