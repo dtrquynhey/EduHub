@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "nJqx0pn/C8uWC8kCqgfZOcWBT6/0krC8AIwr5JqkMyQ=",
+  "Hash": "KbmDWC0AJ2jbGWlw+bm3UuA1UDTcfRq/wnI3BLIUw5o=",
   "Source": "EduHubWeb",
   "BasePath": "_content/EduHubWeb",
   "Mode": "Default",
@@ -1069,6 +1069,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\trucq\\Desktop\\EduHub\\EduHubWeb\\wwwroot\\images\\background.jpg",
+      "SourceId": "EduHubWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\trucq\\Desktop\\EduHub\\EduHubWeb\\wwwroot\\",
+      "BasePath": "_content/EduHubWeb",
+      "RelativePath": "images/background.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\background.jpg"
     },
     {
       "Identity": "C:\\Users\\trucq\\Desktop\\EduHub\\EduHubWeb\\wwwroot\\js\\site.js",

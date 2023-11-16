@@ -38,6 +38,7 @@ namespace EduHubWeb.Models
 
         public IEnumerable<CampaignMember> Members { get; set; }
         public IEnumerable<Interaction> Interactions { get; set; }
+        public IEnumerable<Interaction> Comments { get; set; }
         public Engagement Engagement { get; set; }
 
         public User User { get; set; }

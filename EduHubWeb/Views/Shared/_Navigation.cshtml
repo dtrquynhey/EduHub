@@ -1,0 +1,50 @@
+﻿@{
+    var currentController = (string)ViewContext.RouteData.Values["controller"];
+    var currentAction = (string)ViewContext.RouteData.Values["action"];
+}
+
+<ul class="navbar-nav me-auto">
+    @* <li class="nav-item">
+        <a class="nav-link @((currentController == "Newsfeed" && currentAction == "Index") ? "active" : "")" href="@Url.Action("Index", "Newsfeed")">Newsfeed</a>
+    </li> *@
+    @{
+        var roles = Context.Items["Roles"] as IList<string>;
+        if (roles?.Contains("Teacher") == true)
+        {
+            <li class="nav-item">
+                <a class="nav-link @((currentController == "Newsfeed" && currentAction == "Index") ? "active" : "")" href="@Url.Action("Index", "Newsfeed")">Newsfeed</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @((currentController == "Dashboard" && currentAction == "Index") ? "active" : "")" href="/Dashboard/Index">
+                    Teacher Dashboard
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle @((currentController == "Campaigns") ? "active" : "")" data-bs-toggle="dropdown" href="#">
+                    Campaigns
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/Campaigns/">My Campaigns</a>
+                    <a class="dropdown-item" href="/Campaigns/Create">Create New Campaign</a>
+
+                </div>
+                @* <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#">Separated link</a> *@
+            </li>
+            <!-- HTML for teachers -->
+        }
+        else if (roles?.Contains("Student") == true)
+        {
+            <li class="nav-item">
+                <a class="nav-link @((currentController == "Newsfeed" && currentAction == "Index") ? "active" : "")" href="@Url.Action("Index", "Newsfeed")">Newsfeed</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @((currentController == "Dashboard" && currentAction == "Index") ? "active" : "")" href="@Url.Action("Index", "Dashboard")">
+                    Student Dashboard
+                </a>
+            </li>
+            <!-- HTML for students -->
+        }
+    }
+</ul>
+

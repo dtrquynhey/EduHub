@@ -1,5 +1,6 @@
 ﻿using EduHubLibrary.DataAccess;
 using EduHubLibrary.DataModels;
+using EduHubLibrary.DataModels.Enums;
 using EduHubLibrary.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -33,6 +34,15 @@ namespace EduHubLibrary.Services
                 .ToListAsync();
         }
 
+        public async Task<Dictionary<int, bool>> GetUserLikeStatus(int userId)
+        {
+            var likedCampaigns = await _dbContext.Interactions
+                .Where(i => i.UserId == userId && i.InteractionType == InteractionType.Like)
+                .ToDictionaryAsync(i => i.CampaignId, i => true);
+
+            return likedCampaigns;
+        }
+
         public async Task CreateInteractionAsync(Interaction interaction)
         {
             _dbContext.Interactions.Add(interaction);
@@ -55,5 +65,7 @@ namespace EduHubLibrary.Services
                 await _dbContext.SaveChangesAsync();
             }
         }
+
+
     }
 }

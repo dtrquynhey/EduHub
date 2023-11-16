@@ -33,13 +33,23 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 
 builder.Services.AddRazorPages();
 
-builder.Services.AddControllersWithViews();
-
 builder.Services.AddScoped<DataMappingService>();
 
 builder.Services.AddScoped<IdentitySeederService>();
 
+builder.Services.AddScoped<PopulateRolesFilter>();
+
 builder.Services.AddScoped<CampaignServices>();
+
+builder.Services.AddScoped<InteractionServices>();
+
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(typeof(PopulateRolesFilter));
+});
+
 
 
 var app = builder.Build();
