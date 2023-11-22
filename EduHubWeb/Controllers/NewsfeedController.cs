@@ -11,23 +11,19 @@ using System.Security.Claims;
 
 namespace EduHubWeb.Controllers
 {
-    public class NewsfeedController : Controller
+    public class NewsfeedController : BaseController
     {
-        private readonly EduHubDbContext _dbContext;
         private readonly DataMappingService _dataMappingService;
         private readonly InteractionServices _interactionServices;
-        private readonly UserManager<IdentityUser> _userManager;
 
 
         public NewsfeedController(EduHubDbContext dbContext,
             DataMappingService dataMappingService,
             InteractionServices interactionServices,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager) : base(dbContext, userManager)
         {
-            _dbContext = dbContext;
             _dataMappingService = dataMappingService;
             _interactionServices = interactionServices;
-            _userManager = userManager;
         }
 
         [Authorize]
@@ -46,6 +42,7 @@ namespace EduHubWeb.Controllers
 
                                 .Include(c => c.Interactions)
                                 .ToListAsync();
+
             foreach (var campaign in campaignsDb)
             {
                 var campaignViewModel = _dataMappingService.MapCampaignToCampaignViewModel(campaign);
@@ -63,39 +60,10 @@ namespace EduHubWeb.Controllers
 
                 campaignsList.Add(campaignViewModel);
 
-                int commentsCount = campaign.Interactions.Count(i => i.InteractionType == InteractionType.Comment);
-                var engagementDb = await _dbContext.Engagements.FirstOrDefaultAsync(e => e.CampaignId == campaign.CampaignId);
-                if (engagementDb != null)
-                {
-                    var engagementViewModel = _dataMappingService.MapEngagementToEngagementViewModel(engagementDb);
-
-                    engagementViewModel.CommentsCount = commentsCount;
-                    campaignViewModel.Engagement = engagementDb;
-                }
-                else
-                {
-                    campaignViewModel.Engagement = new Engagement
-                    {
-                        CampaignId = campaign.CampaignId,
-                        ViewsCount = 0,
-                        LikesCount = 0,
-                        CommentsCount = commentsCount
-                    };
-                }
             }
-
-            var userIds = campaignsDb.SelectMany(c => c.Interactions.Select(i => i.UserId)).Distinct();
-            var userDictionary = await _dbContext.Users
-                .Where(u => userIds.Contains(u.UserId))
-                .ToDictionaryAsync(u => u.UserId, u => u.FirstName + u.LastName);
-
-            // Pass this dictionary to the view via ViewBag or ViewData
-            ViewData["Names"] = userDictionary;
-
 
             // Initialize the dictionary for teacher names
             var teacherNames = new Dictionary<int, string>();
-
             // Fill the dictionary with teacher names
             foreach (var campaign in campaignsDb)
             {
@@ -109,8 +77,37 @@ namespace EduHubWeb.Controllers
             // Pass the teacher names dictionary to the view
             ViewBag.TeacherNames = teacherNames;
             ViewBag.UserId = userDb.UserId;
-
+            await UpdateViewDataUsers();
+            await UpdateViewDataCommentCounts();
             return View(campaignsList);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetComments(int campaignId)
+        {
+            // Fetch comments based on campaignId
+            var commentsDb = await _dbContext.Interactions
+                                            .Where(i => i.CampaignId == campaignId && i.InteractionType == InteractionType.Comment)
+                                            .ToListAsync();
+            await UpdateViewDataUsers();
+            await UpdateViewDataCommentCounts();
+            //TODO: 
+            // Map comments to a suitable ViewModel if necessary
+           // var commentsViewModel = _dataMappingService.MapInteractionsToInteractionViewModelsAsync(commentsDb);
+            // Return a partial view with these comments
+            return PartialView("_CommentsPartial", commentsDb);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCommentsCount(int campaignId)
+        {
+            var commentCount = await _dbContext.Interactions
+                                               .CountAsync(i => i.CampaignId == campaignId && i.InteractionType == InteractionType.Comment);
+
+            return Json(new { count = commentCount });
+        }
+
+
+
     }
 }

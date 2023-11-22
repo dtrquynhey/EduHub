@@ -17,7 +17,7 @@ namespace EduHubLibrary.Services
 
         public async Task<Engagement> GetEngagementByCampaignIdAsync(int campaignId)
         {
-            Engagement? engagement = await _dbContext.Engagements
+            Engagement engagement = await _dbContext.Engagements
                 .FirstOrDefaultAsync(e => e.CampaignId == campaignId);
             if (engagement != null)
             {
@@ -37,5 +37,6 @@ namespace EduHubLibrary.Services
             _dbContext.Entry(engagement).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }
+
     }
 }

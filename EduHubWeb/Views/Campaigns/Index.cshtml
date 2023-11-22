@@ -6,30 +6,32 @@
     ViewBag.Title = "Dashboard";
 }
 
-<h1 class="text-center">My Campaigns</h1>
+<div class="container mt-4">
+    <div class="card mb-3 custom-bg">
+        <h1 class="text-center mt-3 custom-title">My Campaigns</h1>
 
-<div class="container">
-    <main role="main">
-        <div class="row row-cols-1 row-cols-md-4 g-6">
-            @foreach (var campaign in Model)
-            {
-                <div class="col">
-                    <a class="text-decoration-none" href="@Url.Action("Edit", "Campaigns", new { id = campaign.CampaignId })">
+        <main role="main">
+            <div class="row g-3">
+                @foreach (var campaign in Model)
+                {
+                    <div class="col-md-3 mb-4">
                         <div class="card h-100">
-                            <img src="@campaign.ImageUrl" class="card-img-top img-fluid" alt="...">
-                            <div class="card-body">
-                                <h4 class="card-header align-items-center">@campaign.Title</h4><br>
-                                <p class="card-title">@campaign.Description</p>
-                                @* <p class="card-text">@campaign.Content</p> *@
-                                <p class="card-text">@campaign.CampaignType</p>
-                            </div>
+                            <a class="text-decoration-none" href="@Url.Action("Detail", "Campaigns", new { id = campaign.CampaignId })">
+                                <img src="@campaign.ImageUrl" class="card-img-top img-fluid" alt="Campaign Image">
+                                <div class="card-body">
+                                    <h4 class="card-title">@campaign.Title</h4>
+                                </div>
+                            </a>
                             <div class="card-footer">
-                                <small class="text-body-secondary">@campaign.TeacherId</small>
+                                <small>@campaign.Engagement.LikesCount Likes</small><br>
+                                <small>@campaign.Engagement.CommentsCount Comments</small>
+                                <a class="text-decoration-underline small" href="@Url.Action("Edit", "Campaigns", new { id = campaign.CampaignId })">Modify >></a>
+
                             </div>
                         </div>
-                    </a>
-                </div>
-            }
-        </div>        
-    </main>
+                    </div>
+                }
+            </div>
+        </main>
+    </div>
 </div>

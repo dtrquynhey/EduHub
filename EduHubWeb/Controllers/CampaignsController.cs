@@ -14,14 +14,12 @@ using System.Security.Claims;
 
 namespace EduHubWeb.Controllers
 {
-    public class CampaignsController : Controller
+    public class CampaignsController : BaseController
     {
         private readonly ILogger<CampaignsController> _logger;
-        private readonly EduHubDbContext _dbContext;
         private readonly DataMappingService _dataMappingService;
         private readonly CampaignServices _campaignServices;
         private readonly InteractionServices _interactionServices;
-        private readonly UserManager<IdentityUser> _userManager;
 
         public CampaignsController(
             ILogger<CampaignsController> logger,
@@ -29,33 +27,33 @@ namespace EduHubWeb.Controllers
             DataMappingService dataMappingService,
             CampaignServices campaignServices,
             UserManager<IdentityUser> userManager,
-            InteractionServices interactionServices)
+            InteractionServices interactionServices) : base(dbContext, userManager)
         {
             _logger = logger;
-            _dbContext = dbContext;
             _dataMappingService = dataMappingService;
             _campaignServices = campaignServices;
-            _userManager = userManager;
             _interactionServices = interactionServices;
         }
 
         // GET: CampaigsnController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             List<CampaignViewModel> campaignsView = new List<CampaignViewModel>();
-            var campaignsDb = _dbContext.Campaigns.ToList();
+            var campaignsDb = await _dbContext.Campaigns
+                                               .Include(c => c.Engagement) // Ensure you include Engagement data
+                                               .ToListAsync(); 
             foreach (var campaign in campaignsDb)
             {
                 campaignsView.Add(_dataMappingService.MapCampaignToCampaignViewModel(campaign));
             }
+            await SetCurrentUserId();
+
             return View(campaignsView);
         }
 
         // GET: CampaigsnController/Details/5
         public async Task<ActionResult> Detail(int id)
         {
-
-
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
             User userDb = await _dbContext.Users.FirstOrDefaultAsync(x => x.Email == user.Email);
@@ -63,6 +61,7 @@ namespace EduHubWeb.Controllers
             var userLikeStatus = await _interactionServices.GetUserLikeStatus(userDb.UserId);
 
             ViewBag.UserLikeStatus = userLikeStatus;
+            await SetCurrentUserId();
 
             Campaign campaign = _dbContext.Campaigns
             .FirstOrDefault(c => c.CampaignId == id);
@@ -104,29 +103,35 @@ namespace EduHubWeb.Controllers
                             campaignViewModel.TeacherId = user.UserId;
                         }
                     }
-                    var campaignDb = _dataMappingService.MapCampaignViewModelToCampaign(campaignViewModel);
                     //await _campaignServices.CreateCampaignAsync(campaignDb);
 
+                    var engagement = await _dbContext.Engagements.FirstOrDefaultAsync(e => e.CampaignId == campaignViewModel.CampaignId);
+                    if (engagement == null)
+                    {
+                        engagement = new Engagement { CampaignId = campaignViewModel.CampaignId, LikesCount = 0, CommentsCount = 0, ViewsCount = 0};
+                        _dbContext.Engagements.Add(engagement);
+                        campaignViewModel.Engagement = engagement;
+                    }
+                    var campaignDb = _dataMappingService.MapCampaignViewModelToCampaign(campaignViewModel);
+
                     _dbContext.Campaigns.Add(campaignDb);
+
                     await _dbContext.SaveChangesAsync();
 
-                    _logger.LogInformation("Campaign created successfully.");
                     return RedirectToAction("Index");
                 }
                 else
                     // If ModelState is not valid, return to the Create view with the current model to show validation errors
                     return View(campaignViewModel);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Handle exceptions, if necessary, and log the error for debugging
-                _logger.LogError(ex, "An error occurred while creating a campaign.");
                 return View();
             }
         }
 
 
-        // GET: CampaigsnController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
             var campaign = await _dbContext.Campaigns // AsNoTracking is optional here since we're not updating in this action
@@ -142,8 +147,6 @@ namespace EduHubWeb.Controllers
         }
 
 
-        // POST: CampaigsnController/Edit/5
-        // POST: CampaignsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, CampaignViewModel campaignViewModel)
@@ -238,5 +241,7 @@ namespace EduHubWeb.Controllers
                 return View();
             }
         }
+
+
     }
 }

@@ -10,7 +10,8 @@ namespace EduHubWeb.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public IdentitySeederService(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public IdentitySeederService(RoleManager<IdentityRole> roleManager, 
+                UserManager<IdentityUser> userManager)
         {
             _roleManager = roleManager;
             _userManager = userManager;

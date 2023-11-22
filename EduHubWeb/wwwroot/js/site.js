@@ -4,7 +4,39 @@
 
 // Write your JavaScript code.
 
-function selectRole (role) {
-  document.getElementById('Role').value = role;
-  document.querySelector('.btn-secondary').textContent = role;
+//function selectRole (role) {
+//  document.getElementById('Role').value = role;
+//  document.querySelector('.btn-secondary').textContent = role;
+//}
+
+function loadComments(url, campaignId) {
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: { campaignId: campaignId },
+        success: function (data) {
+            $('#commentsContainer-' + campaignId).html(data);
+        }
+    });
 }
+
+function comment(url, token, campaignId, commentContent) {
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            __RequestVerificationToken: token,
+            campaignId: campaignId,
+            content: commentContent
+        },
+        success: function (data) {
+            $('#commentsContainer-' + campaignId).html(data);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error adding comment: ' + textStatus, errorThrown);
+        }
+    });
+}
+
+
+

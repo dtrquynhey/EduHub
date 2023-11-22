@@ -38,15 +38,15 @@
             </div> *@
 
             <div class="form-floating mb-3">
-                <input asp-for="ImageUrl" class="form-control" autocomplete="on" aria-required="true" placeholder="name@example.com" />
+                <input asp-for="ImageUrl" class="form-control" autocomplete="on" aria-required="true" />
                 <label asp-for="ImageUrl">Image Url</label>
                 <span asp-validation-for="ImageUrl" class="text-danger"></span>
             </div>
             <!-- Image Upload Field -->
-            <div class="form-floating mb-3">
+            @* <div class="form-floating mb-3">
                 <label for="imageUpload" class="form-label">Upload Image</label>
                 <input type="file" class="form-control" id="imageUpload" name="imageFile" accept="image/*" />
-            </div>
+            </div> *@
 
             <div class="form-floating mb-3">
                 <select asp-for="CampaignType" class="form-control" aria-required="true" required>
