@@ -6,7 +6,7 @@
 
 <div class="container mt-4">
     <div class="card mb-3 custom-bg">
-        
+
         <div class="card-body">
             <div class="custom-text">
                 Posted by @Model.TeacherId on @Model.CreatedDate.ToString("MMMM dd, yyyy")
@@ -33,16 +33,121 @@
             }
             <!-- Comments Section -->
             <div class="mt-4">
-                <h6 class="custom-title">Comments</h6>
+                <h6 class="custom-title mt-3" id="commentsCountContainer-@Model.CampaignId"></h6>
+
+                <div id="commentsContainer-@Model.CampaignId"></div>
                 <div class="row">
                     <div class="col-11 mb-3">
-                        <textarea class="form-control" id="commentText-@Model.CampaignId" placeholder="Write a comment..."></textarea>
+                        <input type="hidden" name="CampaignId" value="@Model.CampaignId" />
+                        <textarea id="textarea-for-@Model.CampaignId" class="form-control" placeholder="Leave a comment..." required></textarea>
                     </div>
                     <div class="col-1">
-                        <button class="btn btn-primary" onclick="sendComment(@Model.CampaignId)">Send</button>
+                        <button type="submit" class="btn btn-primary mt-2 btn-comment" data-campaign-id="@Model.CampaignId">Send</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            loadComments(@Model.CampaignId);
+            updateCommentsCount(@Model.CampaignId);
+        });
+
+        function loadComments(campaignId) {
+            $.ajax({
+                url: '@Url.Action("GetComments", "Newsfeed")',
+                type: 'GET',
+                data: {
+                    campaignId: campaignId
+                },
+                success: function (data) {
+                    $('#commentsContainer-' + campaignId).html(data);
+                }
+            });
+        }
+
+        $(document).on('click', '.btn-comment', function () {
+            event.preventDefault();
+            console.log("btn comment clicked")
+            var campaignId = $(this).data('campaign-id');
+            var commentContent = $('#textarea-for-' + campaignId).val();
+
+            if (commentContent) {
+                comment(campaignId, commentContent);
+            }
+        });
+
+
+        function comment(campaignId, commentContent) {
+            var url = '@Url.Action("Comment", "Interactions")'.replace("campaignId", campaignId);
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                    campaignId: campaignId,
+                    content: commentContent
+                },
+                success: function (partialViewHtml) {
+                    // Append the partial view HTML to the comments container
+                    $('#commentsContainer-' + campaignId).append(partialViewHtml);
+
+                    $('#textarea-for-' + campaignId).val('');
+                    loadComments(campaignId)
+                    updateCommentsCount(campaignId);
+
+                },
+
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error adding comment: ' + textStatus, errorThrown);
+                }
+            });
+        }
+
+        function updateCommentsCount(campaignId) {
+            $.ajax({
+                url: '@Url.Action("GetCommentsCount", "Newsfeed")',
+                type: 'GET',
+                data: { campaignId: campaignId },
+                success: function (response) {
+                    $('#commentsCountContainer-' + campaignId).text(response.count + " Comments");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $(document).on('click', '.delete-comment', function () {
+                var commentId = $(this).data('comment-id');
+                deleteComment(commentId);
+            });
+
+        function deleteComment(commentId) {
+            $.ajax({
+                url: '@Url.Action("DeleteComment", "Interactions")',
+                type: 'POST',
+                data: {
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                    commentId: commentId
+                },
+                success: function () {
+                    // Refresh comments or remove the deleted comment from DOM
+                    alert("Comment deleted successfully.");
+                    location.reload(); // or use a more refined approach
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error deleting comment: ' + textStatus, errorThrown);
+                }
+            });
+        }
+        });
+
+    </script>
+}

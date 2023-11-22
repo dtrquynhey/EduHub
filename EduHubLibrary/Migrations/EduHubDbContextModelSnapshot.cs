@@ -65,7 +65,7 @@ namespace EduHubLibrary.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Campaigns");
+                    b.ToTable("Campaigns", (string)null);
                 });
 
             modelBuilder.Entity("EduHubLibrary.DataModels.CampaignMember", b =>
@@ -94,7 +94,7 @@ namespace EduHubLibrary.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("CampaignMembers");
+                    b.ToTable("CampaignMembers", (string)null);
                 });
 
             modelBuilder.Entity("EduHubLibrary.DataModels.Engagement", b =>
@@ -122,7 +122,7 @@ namespace EduHubLibrary.Migrations
                     b.HasIndex("CampaignId")
                         .IsUnique();
 
-                    b.ToTable("Engagements");
+                    b.ToTable("Engagements", (string)null);
                 });
 
             modelBuilder.Entity("EduHubLibrary.DataModels.Interaction", b =>
@@ -154,7 +154,7 @@ namespace EduHubLibrary.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Interactions");
+                    b.ToTable("Interactions", (string)null);
                 });
 
             modelBuilder.Entity("EduHubLibrary.DataModels.User", b =>
@@ -185,7 +185,7 @@ namespace EduHubLibrary.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("EduHubLibrary.DataModels.Campaign", b =>

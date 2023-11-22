@@ -12,6 +12,7 @@
         var isLiked = ViewBag.UserLikeStatus.ContainsKey(campaign.CampaignId) && ViewBag.UserLikeStatus[campaign.CampaignId];
 
         <div class="card mb-3 custom-bg">
+
             <div class="row">
                 <!-- Text-related fields column -->
                 <div class="col-md-6">
@@ -37,44 +38,8 @@
                             }
                         </div>
 
-                        <!-- Comments Section -->
-                        <h6 class="custom-title mt-3">@campaign.Engagement.CommentsCount Comments</h6>
-                        <div class="comments-container">
-                            @foreach (var comment in campaign.Comments)
-                            {
-                                var usernames = ViewData["Names"] as Dictionary<int, string>;
-                                <div class="card-body custom-bg">
-
-                                    <div class="card-body d-flex justify-content-between align-items-center">
-                                        <header class="blockquote-footer custom-text">
-                                            @usernames[comment.UserId]:  
-                                            @comment.Content - on @comment.InteractionDate.ToString("M/dd/yyyy")
-                                        </header>
-                                        @if (ViewBag.UserId == comment.UserId)
-                                        {
-                                            @using (Html.BeginForm("DeleteComment", "Interactions", new { commentId = comment.InteractionId }, FormMethod.Post))
-                                            {
-                                                <input type="hidden" name="campaignId" value="@campaign.CampaignId" />
-                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                            }
-                                        }
-                                    </div>
-                                    
-
-                                </div>
-                            }
-                        </div>
-                        <div class="row">
-                            @using (Html.BeginForm("Comment", "Interactions", FormMethod.Post, new { @class = "comment-form" }))
-                            {
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="CampaignId" value="@campaign.CampaignId" />
-                                <textarea name="Content" class="form-control" placeholder="Leave a comment..." required></textarea>
-                                <button type="submit" class="btn btn-primary mt-2">Send</button>
-                            }
-
-
-                        </div>
+                        <h6 class="custom-title mt-3" id="commentsCountContainer-@campaign.CampaignId"></h6>
+                        <a class="text-decoration-underline" href="@Url.Action("Detail", "Campaigns", new { id = campaign.CampaignId })">Leave a comment?</a>
                     </div>
                 </div>
                 <div class="col-md-6 d-flex justify-content-end align-items-center">
@@ -85,3 +50,39 @@
     }
 </div>
 
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+        @foreach (var campaign in Model)
+        {
+            <text>
+                    updateCommentsCount(@campaign.CampaignId);
+            </text>
+        }
+                });
+
+        function updateCommentsCount(campaignId) {
+            $.ajax({
+                url: '@Url.Action("GetCommentsCount", "Newsfeed")',
+                type: 'GET',
+                data: { campaignId: campaignId },
+                success: function (response) {
+                    $('#commentsCountContainer-' + campaignId).text(response.count + " Comments");
+                }
+            });
+        }
+
+
+        // Pass the URL from the Razor view to the external JS
+        // var commentUrl = '@Url.Action("Comment", "Interactions")';
+        // var getCommentsUrl = '@Url.Action("GetComments", "Newsfeed")';
+        // // Initialize a global object to store these URLs
+        // window.siteUrls = {
+        //     commentUrl: commentUrl,
+        //     getCommentsUrl: getCommentsUrl
+        // };
+
+    </script>
+}

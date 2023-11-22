@@ -26,7 +26,7 @@ namespace EduHubWeb.Models
         public string ImageUrl { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         [DataType(DataType.DateTime)]
         public DateTime LastModifiedDate { get; set; }

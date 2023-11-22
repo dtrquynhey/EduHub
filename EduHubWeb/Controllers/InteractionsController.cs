@@ -11,23 +11,18 @@ using NuGet.DependencyResolver;
 
 namespace EduHubWeb.Controllers
 {
-    //[Route("[controller]")]
-    public class InteractionsController : Controller
+    public class InteractionsController : BaseController
     {
-        private readonly ILogger<InteractionsController> _logger;
-        private readonly EduHubDbContext _dbContext;
         private readonly DataMappingService _dataMappingService;
-        private readonly InteractionServices _interactionServices;
-        private readonly UserManager<IdentityUser> _userManager;
 
         public InteractionsController(EduHubDbContext dbContext,
             DataMappingService dataMappingService,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager) 
+            : base(dbContext, userManager)
         {
-            _dbContext = dbContext;
             _dataMappingService = dataMappingService;
-            _userManager = userManager;
         }
+
 
         [HttpPost("Interactions/Like")]
         [ValidateAntiForgeryToken]
@@ -65,6 +60,19 @@ namespace EduHubWeb.Controllers
                 var interactionDb = _dataMappingService.MapInteractionViewModelToInteraction(interactionViewModel);
 
                 _dbContext.Interactions.Add(interactionDb);
+
+                // Update Engagement for Likes
+                var engagement = await _dbContext.Engagements.FirstOrDefaultAsync(e => e.CampaignId == campaignId);
+                if (engagement == null)
+                {
+                    engagement = new Engagement { CampaignId = campaignId, LikesCount = 1, CommentsCount = 0, ViewsCount = 0 };
+                    _dbContext.Engagements.Add(engagement);
+                }
+                else
+                {
+                    engagement.LikesCount++; // Increment likes count
+                }
+                await _dbContext.SaveChangesAsync();
             }
             await _dbContext.SaveChangesAsync();
 
@@ -78,13 +86,7 @@ namespace EduHubWeb.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
-
             User userDb = await _dbContext.Users.FirstOrDefaultAsync(x => x.Email == user.Email);
-
-            if (userDb == null)
-            {
-                return NotFound();
-            }
 
             var interactionViewModel = new InteractionViewModel
             {
@@ -98,14 +100,33 @@ namespace EduHubWeb.Controllers
             var interactionDb = _dataMappingService.MapInteractionViewModelToInteraction(interactionViewModel);
 
             _dbContext.Interactions.Add(interactionDb);
+
+            var engagement = await _dbContext.Engagements.FirstOrDefaultAsync(e => e.CampaignId == campaignId);
+            if (engagement == null)
+            {
+                engagement = new Engagement { CampaignId = campaignId, LikesCount = 0, CommentsCount = 1, ViewsCount = 0 };
+                _dbContext.Engagements.Add(engagement);
+            }
+            else
+            {
+                engagement.CommentsCount++; // Increment comments count
+            }
+
             await _dbContext.SaveChangesAsync();
 
-            // Redirect back to the campaign detail or to a confirmation page
-            return RedirectToAction("Index", "Newsfeed", new { id = campaignId });
+            await UpdateViewDataUsers();
+            await UpdateViewDataCommentCounts();
+
+            //var comments = await _dbContext.Interactions
+            //                            .Where(i => i.CampaignId == campaignId
+            //                            && i.InteractionType == InteractionType.Comment)
+            //                            .ToListAsync();
+            return PartialView("~/Views/Newsfeed/_CommentPartial.cshtml", interactionDb);
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> DeleteComment(int commentId)
+        public async Task<JsonResult> DeleteComment(int commentId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
@@ -127,11 +148,12 @@ namespace EduHubWeb.Controllers
                     await _dbContext.SaveChangesAsync();
                 }
 
-                return RedirectToAction("Index", "Newsfeed");
+                return Json(new { success = true });
             }
 
-            return NotFound();
+            return Json(new { success = false, message = "Comment not found or unauthorized." });
         }
+
 
     }
 }

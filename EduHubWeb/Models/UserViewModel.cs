@@ -6,6 +6,7 @@ namespace EduHubWeb.Models
 {
     public class UserViewModel : IdentityUser
     {
+        
         public string Email {  get; set; }
 
         [Display(Name = "Firstname")]

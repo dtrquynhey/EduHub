@@ -7,7 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Dashboard\**" />
+    <Compile Remove="wwwroot\lib\**" />
+    <Content Remove="Views\Dashboard\**" />
+    <Content Remove="wwwroot\lib\**" />
+    <EmbeddedResource Remove="Views\Dashboard\**" />
+    <EmbeddedResource Remove="wwwroot\lib\**" />
+    <None Remove="Views\Dashboard\**" />
+    <None Remove="wwwroot\lib\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\DashboardController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\Home\Privacy.cshtml" />
+    <Content Remove="wwwroot\css\site.css" />
   </ItemGroup>
 
   <ItemGroup>

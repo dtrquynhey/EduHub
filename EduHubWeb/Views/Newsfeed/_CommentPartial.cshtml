@@ -1,0 +1,13 @@
+﻿@using EduHubLibrary.DataModels;
+@model Interaction
+@{
+    var usernames = ViewData["Users"] as Dictionary<int, string>;
+}
+
+<div class="blockquote-footer custom-text">
+    @usernames[Model.UserId] 
+    <div class="custom-title">
+        @Model.Content - on @Model.InteractionDate.ToString("MMM dd, yyyy")
+    </div>
+</div>
+<!-- Your logic for delete button if necessary -->
